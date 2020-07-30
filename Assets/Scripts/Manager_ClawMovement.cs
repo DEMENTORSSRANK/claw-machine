@@ -1,18 +1,15 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 using UnityEngine.UI;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
-public class Manager_ClawMovement : MonoBehaviour {
-
-    [Header("Player Settings")]
-    public bool freePlay = true;
+public class Manager_ClawMovement : MonoBehaviour
+{
+    [Header("Player Settings")] public bool freePlay = true;
     public int playerCoins = 10;
 
-    [Header("UI Settings")]
-    public Text coinsTextLabel;
+    [Header("UI Settings")] public Text coinsTextLabel;
     public GameObject UI_OutOfCoinsPopup;
 
     // These are used to move the claw when using UI On Screen Buttons
@@ -21,21 +18,18 @@ public class Manager_ClawMovement : MonoBehaviour {
     private bool UI_ClawButtonLeft = false;
     private bool UI_ClawButtonRight = false;
 
-    [Space(5f)]
-
-    [Header("Claw Settings")]
+    [Space(5f)] [Header("Claw Settings")]
 
     // Our object that we move which, in turn, moves the claw and rope
     public Transform clawHolder;
 
     // X and Z movement speed
-    public float movementSpeed = 1.0f; 
+    public float movementSpeed = 1.0f;
 
     // Y drop and raise speed
     public float dropSpeed = 1.0f;
 
-    [Range(0,10)]
-    public int failRate = 0;
+    [Range(0, 10)] public int failRate;
 
     [HideInInspector]
     // This is false when we are droping / rasing the claw.
@@ -54,11 +48,9 @@ public class Manager_ClawMovement : MonoBehaviour {
     public bool shouldReturnHomeAutomatically = false;
 
     // Position Variables
-    [HideInInspector]
-    public Vector3 clawHomePosition;
+    [HideInInspector] public Vector3 clawHomePosition;
 
-    [HideInInspector]
-    public Vector3 clawDropFromPosition;
+    [HideInInspector] public Vector3 clawDropFromPosition;
 
     // Animation Variables
     public Animation clawHeadAnimation;
@@ -67,6 +59,7 @@ public class Manager_ClawMovement : MonoBehaviour {
 
     // Used to add a buffer between the boundary and the center of the claw head (so we don't clip)
     public float clawHeadSizeX = 0.30f;
+
     public float clawHeadSizeZ = 0.13f;
 
     // Movement boundaries
@@ -74,10 +67,8 @@ public class Manager_ClawMovement : MonoBehaviour {
     private float boundaryX_Right;
     private float boundaryZ_Back;
     private float boundaryZ_Forward;
-    
-    [Space(5f)]
 
-    public Transform clawBoundaryX_Left;
+    [Space(5f)] public Transform clawBoundaryX_Left;
     public Transform clawBoundaryX_Right;
     public Transform clawBoundaryZ_Back;
     public Transform clawBoundaryZ_Forward;
@@ -86,28 +77,23 @@ public class Manager_ClawMovement : MonoBehaviour {
 
     // Motors
     public Transform topMainMotor;
+
     public Transform overHeadMotorRailSystem;
 
-    [HideInInspector]
-    public Vector3 topMainMotorHomePosition;
+    [HideInInspector] public Vector3 topMainMotorHomePosition;
 
-    [HideInInspector]
-    public Vector3 overHeadMotorRailSystemHomePosition;
+    [HideInInspector] public Vector3 overHeadMotorRailSystemHomePosition;
 
-    [HideInInspector]
-    public bool isDroppingBall = false;
+    [HideInInspector] public bool isDroppingBall = false;
 
-
-    [Header("Prop Joystick Box")]
-    public Transform propJoyStick;
+    [Header("Prop Joystick Box")] public Transform propJoyStick;
     public float propJoystickSpeed = 2.0f;
 
-    [Header("Misc Settings")]
-    public PrizeCatcherDetector_ClawMachine prizeCatcherDetector;
+    [Header("Misc Settings")] public PrizeCatcherDetector_ClawMachine prizeCatcherDetector;
 
-	// Use this for initialization
-	void Start () {
-
+    // Use this for initialization
+    private void Start()
+    {
         // Setup our inital positions
         clawHomePosition = clawHolder.transform.position;
         topMainMotorHomePosition = topMainMotor.position;
@@ -123,17 +109,16 @@ public class Manager_ClawMovement : MonoBehaviour {
         boundaryX_Right -= clawHeadSizeX;
         boundaryZ_Back -= clawHeadSizeZ;
         boundaryZ_Forward += clawHeadSizeZ;
-
     }
-	
-	// Update is called once per frame
-	void Update () {
 
+    // Update is called once per frame
+    private void Update()
+    {
         // Update the UI text label
         coinsTextLabel.text = playerCoins.ToString();
-	}
+    }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         // If movement is allowed
         if (canMove)
@@ -173,7 +158,6 @@ public class Manager_ClawMovement : MonoBehaviour {
         }
     }
 
-
     private void dropClawButtonInput()
     {
         // Make sure we're NOT above the prize catcher, we need to do a release for that, NOT a drop
@@ -200,7 +184,7 @@ public class Manager_ClawMovement : MonoBehaviour {
                 // Make sure the player has coins
                 if (playerCoins > 0)
                 {
-                    playerCoins--;  // Remove one coin
+                    playerCoins--; // Remove one coin
 
                     // Drop our claw
                     StartCoroutine(dropClaw());
@@ -264,7 +248,6 @@ public class Manager_ClawMovement : MonoBehaviour {
 
     private void clawMoveLeft()
     {
-       
         // + X direction
         if (clawHolder.transform.position.x > boundaryX_Left)
         {
@@ -299,7 +282,7 @@ public class Manager_ClawMovement : MonoBehaviour {
     /// Used to drop the claw from a position. 
     /// </summary>
     /// <returns></returns>
-    IEnumerator dropClaw()
+    private IEnumerator dropClaw()
     {
         // Save our drop position
         clawDropFromPosition = clawHomePosition;
@@ -311,7 +294,7 @@ public class Manager_ClawMovement : MonoBehaviour {
         while (clawHolder.transform.position.y >= LimitY)
         {
             // If something stops our movement, breakout. This is the WallSensor_ClawMachine script right now.
-            if(stopMovement)
+            if (stopMovement)
             {
                 break;
             }
@@ -330,7 +313,7 @@ public class Manager_ClawMovement : MonoBehaviour {
         {
             // Go right back up to where we dropped from
             while (clawHolder.transform.position.y <= clawDropFromPosition.y)
-            { 
+            {
                 // Move
                 clawHolder.Translate(0f, dropSpeed * 1 * Time.deltaTime, 0f);
 
@@ -412,7 +395,6 @@ public class Manager_ClawMovement : MonoBehaviour {
         stopMovement = false;
 
         yield return null;
-
     }
 
     /// <summary>
@@ -420,10 +402,10 @@ public class Manager_ClawMovement : MonoBehaviour {
     /// The home position is where the claw STARTS when the game begins. Code found in Start() will set this location.
     /// </summary>
     /// <returns></returns>
-    IEnumerator returnClawToHomePosition()
+    private IEnumerator returnClawToHomePosition()
     {
         // First go back up
-        while(clawHolder.transform.position.y < clawDropFromPosition.y)
+        while (clawHolder.transform.position.y < clawDropFromPosition.y)
         {
             clawHolder.Translate(0f, dropSpeed * 1 * Time.deltaTime, 0f);
 
@@ -458,7 +440,7 @@ public class Manager_ClawMovement : MonoBehaviour {
     /// This IEnumerator is used to create a "failed" state, which opens the claws only so far.
     /// </summary>
     /// <returns></returns>
-    IEnumerator WeakClaws()
+    private IEnumerator WeakClaws()
     {
         clawHeadAnimation["Claw_Open_Weak"].speed = -1f;
         clawHeadAnimation["Claw_Open_Weak"].time = clawHeadAnimation["Claw_Open_Weak"].length;
@@ -469,14 +451,13 @@ public class Manager_ClawMovement : MonoBehaviour {
         clawHeadAnimation["Claw_Close_From_Weak"].speed = -1f;
         clawHeadAnimation["Claw_Close_From_Weak"].time = clawHeadAnimation["Claw_Close_From_Weak"].length;
         clawHeadAnimation.CrossFade("Claw_Close_From_Weak");
-
     }
 
     /// <summary>
     /// Used to drop the ball
     /// </summary>
     /// <returns></returns>
-    IEnumerator DropBall()
+    private IEnumerator DropBall()
     {
         // Flag we are dropping our balls
         isDroppingBall = true;
@@ -490,7 +471,6 @@ public class Manager_ClawMovement : MonoBehaviour {
         // Flag we can drop a ball again
         isDroppingBall = false;
     }
-
 
     /// <summary>
     /// This is used to close the UI popup and give the player more coins.
@@ -526,6 +506,7 @@ public class Manager_ClawMovement : MonoBehaviour {
     {
         UI_ClawButtonLeft = true;
     }
+
     public void UI_MoveClawLeft_Off()
     {
         UI_ClawButtonLeft = false;
@@ -536,9 +517,11 @@ public class Manager_ClawMovement : MonoBehaviour {
     {
         UI_ClawButtonRight = true;
     }
+
     public void UI_MoveClawRight_Off()
     {
-        UI_ClawButtonRight = false; ;
+        UI_ClawButtonRight = false;
+        ;
     }
 
     // For Event Types when moving Up (Pointer Down / Up)
@@ -546,6 +529,7 @@ public class Manager_ClawMovement : MonoBehaviour {
     {
         UI_ClawButtonUp = true;
     }
+
     public void UI_MoveClawUp_Off()
     {
         UI_ClawButtonUp = false;
@@ -556,6 +540,7 @@ public class Manager_ClawMovement : MonoBehaviour {
     {
         UI_ClawButtonDown = true;
     }
+
     public void UI_MoveClawDown_Off()
     {
         UI_ClawButtonDown = false;
