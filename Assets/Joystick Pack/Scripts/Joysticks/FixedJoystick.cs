@@ -1,5 +1,7 @@
 ﻿public class FixedJoystick : Joystick
 {
+    public static bool Touching;
+    
     private Manager_ClawMovement _manager;
 
     private void Awake()

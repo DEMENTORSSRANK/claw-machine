@@ -37,7 +37,11 @@ public class MouseOrbitImproved : MonoBehaviour
     private void LateUpdate()
     {
         if (!target) return;
-        if (Input.GetMouseButton(0))
+        // if (Application.isMobilePlatform)
+        // {
+        //     _x = 
+        // }
+        if (TryGetTouchPosition.Try(out _))
         {
             _x += Input.GetAxis("Mouse X") * xSpeed * distance * 0.02f;
             _y -= Input.GetAxis("Mouse Y") * ySpeed * 0.02f;
@@ -47,10 +51,11 @@ public class MouseOrbitImproved : MonoBehaviour
         var rotation = Quaternion.Euler(_y, _x, 0);
 
         distance = Mathf.Clamp(distance - Input.GetAxis("Mouse ScrollWheel") * 5, distanceMin, distanceMax);
-        if (Physics.Linecast(target.position, transform.position, out var hit))
-        {
-            distance -= hit.distance;
-        }
+        // if (Physics.Linecast(target.position, transform.position, out var hit, 1 << 8))
+        // {
+        //     distance -= hit.distance;
+        //     print("sadasdasd");
+        // }
         var negDistance = new Vector3(0.0f, 0.0f, -distance);
         var position = rotation * negDistance + target.position;
         

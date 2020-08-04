@@ -33,7 +33,7 @@ public class Manager_ClawMovement : MonoBehaviour
 
     [HideInInspector]
     // This is false when we are droping / rasing the claw.
-    public bool canMove = true;
+    public static bool canMove = true;
 
     [HideInInspector]
     // This will stop any downward Y movement. Typically called from outside of this class. 
@@ -160,6 +160,7 @@ public class Manager_ClawMovement : MonoBehaviour
 
     private void dropClawButtonInput()
     {
+        if (!canMove) return;
         // Make sure we're NOT above the prize catcher, we need to do a release for that, NOT a drop
         if (prizeCatcherDetector.isClawAbovePrizeCatcher)
         {
@@ -384,16 +385,15 @@ public class Manager_ClawMovement : MonoBehaviour
 
                 yield return new WaitForSeconds(1.55f);
 
-                CloseClaw();
+                CloseClaw();        
+                // We can move now
+                canMove = true;
+                
+                // Allow movement again if stopped from collding with inside wall
+                stopMovement = false;
             }
         }
-
-        // We can move now
-        canMove = true;
-
-        // Allow movement again if stopped from collding with inside wall
-        stopMovement = false;
-
+        
         yield return null;
     }
 
