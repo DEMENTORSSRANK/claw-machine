@@ -11,6 +11,6 @@ public class HideWhenAboveClawMachine : MonoBehaviour
 
     private void Update()
     {
-        _renderer.enabled = transform.localPosition.y < -3;
+        _renderer.enabled = transform.localPosition.y < -3.2;
     }
 }
