@@ -153,7 +153,7 @@ public class Api : MonoBehaviour
             var i = Instantiate(wonPanelPrefab, wonPanel.transform).transform;
             i.GetComponentInChildren<TMP_Text>().text = "זכית ב – " + Reverse(score.ToString());
 
-            var r = new UnityWebRequest(reward.Reward.RewardIconUrl);
+            var r = new UnityWebRequest((string) reward.Reward.RewardIconUrl);
             print(reward.Reward.RewardIconUrl);
             var iconDh = new DownloadHandlerTexture();
             r.downloadHandler = iconDh;
