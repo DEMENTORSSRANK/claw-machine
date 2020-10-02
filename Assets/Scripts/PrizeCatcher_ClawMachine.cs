@@ -21,6 +21,8 @@ public class PrizeCatcher_ClawMachine : MonoBehaviour {
                      
             // Destroy the prize
             Destroy(other.gameObject);
+            
+            SoundControl.Instance.PlayGotSound();
         }
     }
 }

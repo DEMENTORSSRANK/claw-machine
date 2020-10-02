@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.Video;
 
-public class PlayVideo : MonoBehaviour
+public class DPlayVideo : MonoBehaviour
 {
     private VideoPlayer _player;
     
